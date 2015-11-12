@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class Block implements Entity{
 	protected int z,width,height;
-	
+	//test
 	protected Point position;
 	
 	protected int[] positionx;
