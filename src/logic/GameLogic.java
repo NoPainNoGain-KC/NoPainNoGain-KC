@@ -23,21 +23,24 @@ public class GameLogic {
 	public GameLogic() {
 		// TODO Auto-generated constructor stub
 		blocks = new ArrayList<Block>();
+			for(Block block : Field.getBlocks()){
+				try{
+					Field.checkBlock(block);
+					RenderableHolder.getInstance().add(block);
+					blocks.add(block);
+				} catch (NullPointerException e){}
+			}
 		
-		for(Block block : Field.getBlocks()){
-			RenderableHolder.getInstance().add(block);
-			blocks.add(block);
-		}
 		//dfdfdd
 		player = new Player[4];
 		blocks =new ArrayList<>();
 		//makeMap
-		Block first = Field.getBlocks()[0];
+		Block first = Field.getBlocks()[22];
 		for(int i=0;i<4;i++)
 		{
 			//playStatus[i]=new PlayStatus();
 			//RenderableHolder.getInstance().add(playStatus[i]);
-			player[i]=new Player(first);
+			player[i] = new Player(first);
 			RenderableHolder.getInstance().add(player[i]);
 		}
 		phase=PhaseStart;
@@ -45,7 +48,7 @@ public class GameLogic {
 		ticCouter=0;
 		z=0;
 	}
-
+	
 	public void logicUpdate() {
 		// TODO Auto-generated method stub
 		Player now=player[index];
@@ -65,29 +68,35 @@ public class GameLogic {
 //				phase+=1;
 //			}
 		}
-		/*
+		
 		else if(phase==PhaseBlockAction)
 		{
-			if(now.endBlockAction())
-			{
-				phase+=1;
-			}
+			GameLogic.nextPhase();
+//			if(now.endBlockAction())
+//			{
+//				phase+=1;
+//			}
 		}
 		else if(phase==PhaseAction)
 		{
-			if(now.endAciton())
-			{
-				phase+=1;
-			}
+			GameLogic.nextPhase();
+//			if(now.endAciton())
+//			{
+//				phase+=1;
+//			}
 		}
 		else if(phase==PhaseEnd)
 		{
-			
-			if(endEnd())
-			{
-				phase=0;
+			index++;
+			if(index == 4){
+				index = 0;
 			}
-		}
+			GameLogic.nextPhase();
+//			if(endEnd())
+//			{
+//				phase=0;
+//			}
+		}/*
 	}
 
 	private boolean endEnd() {
@@ -107,7 +116,7 @@ public class GameLogic {
 		
 	
 	}
-	public void nextPhase(){
+	public static void nextPhase(){
 		if(phase != GameLogic.PhaseEnd)
 			phase ++;
 		else
