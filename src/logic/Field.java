@@ -2,14 +2,26 @@ package logic;
 
 public class Field {
 	
-	private static final Field currentField = new Field(16);
+	private static final Field currentField = new Field(100);
 	public static Field getInstance(){
 		return currentField;
 	}
 	
 	private static Block[] blocks;
-	                             
-	public Field(int length){		
+	public static int[][] field;
+			
+	public Field(int length){	
+		int[][] field = {{0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0},
+				{0,0,1,1,1,1,1,1,0,0},
+				{0,0,1,0,0,0,0,1,0,0},
+				{0,0,1,0,0,0,0,1,0,0},
+				{0,0,1,0,0,0,0,1,0,0},
+				{0,0,1,0,0,0,0,1,0,0},
+				{0,0,1,1,1,1,1,1,0,0},
+				{0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0}};
+		this.field = field;
 		createField(length);
 		setNextBlock();
 	}
@@ -20,33 +32,50 @@ public class Field {
 	
 	public static void createField(int length){
 		blocks = new Block[length];
-		for(int i = 0 ; i<length ; i++){
-			int x = 0;
-			int y = 0;
-			if(i<=15 && i>12){
-				x = 0;
-				y = 4 - (i%4);
-			} else if(i<=12 && i>8){
-				x = 12 - (i);
-				y = 4;
-			} else if(i<=8 && i>4){
-				x = 4;
-				y = (i%4 == 0) ? 4 : i%4;
-			} else if(i<=4){
-				x = i;
-				y = 0;
-			} else {
-				return;
+		for(int x=0; x<= field[0].length; x++){
+			for(int y=0; y<= field.length; y++){
+				if(getTerrain(x,y) == 1){
+					blocks[x+y*10] = new SimpleBlock(100*x, 100*y, 100, 100);
+				}
 			}
-			blocks[i] = new SimpleBlock(50+100*x,50+100*y,100,100);
 		}
+	}
+	
+	public static int getTerrain(int x,int y){
+		if(x < 0 || x >= field[0].length || y < 0 || y >= field.length)
+			return -3;
+		return field[y][x];
 	}
 	
 	public static void setNextBlock(){
 		for(int i = 0;i<blocks.length;i++){
-			int nextindex = (i+1 < blocks.length) ? i+1 : 0;
-			Block[] next = {blocks[nextindex]};
-			blocks[i].setNextBlock(next);
+			int x = i%10;
+			int y = i/10;
+			Block[] next = new Block[4];
+			if(getTerrain(x-1,y) > 0){
+				next[Player.LEFT] = blocks[(x-1)+(y)*10];
+			}
+			if(getTerrain(x+1,y) > 0){
+				next[Player.RIGHT] = blocks[(x+1)+(y)*10];		
+			}
+			if(getTerrain(x,y-1) > 0){
+				next[Player.UP] = blocks[(x)+(y-1)*10];
+				
+			}
+			if(getTerrain(x,y+1) > 0){
+				next[Player.DOWN] = blocks[(x)+(y+1)*10];
+			}
+			try{
+				checkBlock(blocks[i]);
+				blocks[i].setNextBlock(next);
+			} catch(NullPointerException e){
+				
+			}
 		}
+	}
+	
+	public static void checkBlock(Block block) throws NullPointerException {
+		if(block == null)
+			throw new NullPointerException();
 	}
 }
