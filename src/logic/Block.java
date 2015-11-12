@@ -9,12 +9,12 @@ import java.util.List;
 
 
 public abstract class Block implements Entity{
+
 	protected int z,width,height;
 	//test
 	protected Point position;
 	
-	protected int[] positionx;
-	protected int[] positiony;
+	protected Point[] positionPlayer;
 	protected Player posessedBy;
 	protected List<Player> inThisBlock;
 	protected Block[] nextBlock;
@@ -22,21 +22,23 @@ public abstract class Block implements Entity{
 	protected Color color;
 	
 	public Block(int x, int y,int width,int height){
+		nextBlock = new Block[4];
+		
 		position = new Point(x,y);
 		this.width = width;
 		this.height = height;
 
-		positionx = new int[4];
-		positiony = new int[4];
 		inThisBlock = new ArrayList<Player>();
+		
+		positionPlayer = new Point[4];
 		
 		int centerx = x + width/4;
 		int centery = y + height/4;
 		for(int i = 0 ; i<4 ; i++){
-			positionx[i] = centerx + (width * (i / 2))/2;
-			positiony[i] = centery + (height * (i % 2))/2;
+			int positionx = centerx + (width * (i / 2))/2;
+			int positiony = centery + (height * (i % 2))/2;
+			positionPlayer[i] = new Point(positionx,positiony);
 		}
-		
 	}
 
 	@Override
@@ -78,14 +80,32 @@ public abstract class Block implements Entity{
 		this.nextBlock = nextBlock;
 	}
 
-	public int getPositionX(){
-		return positionx[inThisBlock.size()-1];
+	public Point getPosition(){
+		return positionPlayer[indexOfPosition()];
 	}	
-	public int getPositionY(){
-		return positiony[inThisBlock.size()-1];
+	
+	private int indexOfPosition(){
+		for(int i = 0;i<4;i++){
+			if(!checkPoint(i)){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	private boolean checkPoint(int i){
+		for(Player p : inThisBlock){
+			if(positionPlayer[i].inPoint(p)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void addPlayer(Player p){
 		inThisBlock.add(p);
+	}
+	public void removePlayer(Player p){
+		inThisBlock.remove(p);
 	}
 }
