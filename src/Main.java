@@ -5,7 +5,7 @@ import render.GameScreen;
 import logic.GameLogic;
 
 
-
+//try
 public class Main {
 	public static void main(String[] args){
 		JFrame frame = new JFrame("Catch a friut");

@@ -12,15 +12,12 @@ public abstract class Block implements Entity{
 	protected int z,width,height;
 	//test
 	protected Point position;
-	
 	protected int[] positionx;
 	protected int[] positiony;
 	protected Player posessedBy;
 	protected List<Player> inThisBlock;
 	protected Block[] nextBlock;
-	
 	protected Color color;
-	
 	public Block(int x, int y,int width,int height){
 		position = new Point(x,y);
 		this.width = width;

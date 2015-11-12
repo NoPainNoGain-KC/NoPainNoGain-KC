@@ -2,6 +2,7 @@ package logic;
 
 
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class GameLogic {
 	//private PlayStatus[] playStatus;
 	private Player[] player;
 	private List<Block> blocks;
-	
+	private PlayerStatus[] playerStatus;
 	private int ticCouter,z,index;
 	private static int phase;
 	static int PhaseStart=0,
@@ -20,11 +21,25 @@ public class GameLogic {
 			PhaseBlockAction=2,
 			PhaseAction=3,
 			PhaseEnd=4;
+	static int PlaystatusHight=350;
+	static int PlaystatusWidth=150;
+	static Point[] position=new Point[]{
+		new Point(0,0),new Point(0,350),new Point(850,0),new Point(850,350)
+	};
 	public GameLogic() {
 		// TODO Auto-generated constructor stub
+		
+		playerStatus=new PlayerStatus[4];
+		Color[] color=new Color[4];
+		color[0]=Color.BLACK;
+		color[1]=Color.blue;
+		color[2]=Color.GRAY;
+		color[3]=Color.GREEN;
+		
 		blocks = new ArrayList<Block>();
 		
 		for(Block block : Field.getBlocks()){
+			block.position.setX(block.position.getX()+180);
 			RenderableHolder.getInstance().add(block);
 			blocks.add(block);
 		}
@@ -35,8 +50,8 @@ public class GameLogic {
 		Block first = Field.getBlocks()[0];
 		for(int i=0;i<4;i++)
 		{
-			//playStatus[i]=new PlayStatus();
-			//RenderableHolder.getInstance().add(playStatus[i]);
+			playerStatus[i]=new PlayerStatus(position[i],PlaystatusHight,PlaystatusWidth,color[i]);
+			RenderableHolder.getInstance().add(playerStatus[i]);
 			player[i]=new Player(first);
 			RenderableHolder.getInstance().add(player[i]);
 		}
