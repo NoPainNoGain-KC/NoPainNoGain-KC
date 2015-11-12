@@ -10,27 +10,18 @@ import input.InputUtility;
 
 
 public class Player implements Entity {
-	//direction
-	final static int DOWN = 0;
-	final static int LEFT = 1;
-	final static int RIGHT = 2;
-	final static int UP = 3;
-	
 	final static int Speed = 3;
 	final static int MaxDistance = 6;
 	
 	private Point position;
 	
 	private int direction;
-	private Point destination;
 	
 	private static int size = 30;
 	private Color color;
 	
 	private int numStep;
 	private int countStep;
-	private boolean walking;
-	
 	
 	private Block currentBlock;
 	
@@ -38,16 +29,12 @@ public class Player implements Entity {
 		position = new Point(0,0);
 		this.currentBlock = b;
 		b.addPlayer(this);
-		
-		direction = Player.DOWN;
-		
 		int red = (int)(Math.random()*256);
 		int green = (int)(Math.random()*256);
 		int blue = (int)(Math.random()*256);
 		color = new Color(red,green,blue);
-		
-		position.setX(this.currentBlock.getPosition().getX());
-		position.setY(this.currentBlock.getPosition().getY());
+		position.setX(this.currentBlock.getPositionX());
+		position.setY(this.currentBlock.getPositionY());
 
 	}
 
@@ -95,62 +82,23 @@ public class Player implements Entity {
 		// TODO Auto-generated method stub
 		if(InputUtility.getKeyPressed(KeyEvent.VK_SPACE)){
 			this.numStep = (int) (Math.random()*6+1);
-			System.out.println(numStep);
-			GameLogic.nextPhase();
 		}
 	}
 
 	@Override
 	public void updateWalking() {
 		// TODO Auto-generated method stub
-		if(walking){
-			if(!finishX()){
-				stepX();
-			} 
-			if(!finishY()){
-				stepY();
-			} 
-			if(finishX() && finishY()) {
-				endStep();
-			}
-		} else {
-			try{
-				if(InputUtility.getKeyPressed(KeyEvent.VK_A)){
-					if(direction != RIGHT){
-						step(LEFT);
-					}
-				}
-				if(InputUtility.getKeyPressed(KeyEvent.VK_D)){
-					if(direction != LEFT){
-						step(RIGHT);
-					}
-				}
-				if(InputUtility.getKeyPressed(KeyEvent.VK_W)){
-					if(direction != DOWN){
-						step(UP);	
-					}
-				}
-				if(InputUtility.getKeyPressed(KeyEvent.VK_S)){
-					if(direction != UP){
-						step(DOWN);					
-					}
-				}
-			} catch (NullPointerException e){ 
-			}
+		if(!finishX()){
+			stepX();
+		} 
+		if(!finishY()){
+			stepY();
+		} 
+		if(currentBlock.position.inPoint(this)) {
+			
 		}
-		
 	}
 
-	private void step(int direction){
-		Field.checkBlock(currentBlock.nextBlock[direction]);
-		currentBlock.removePlayer(this);
-		currentBlock = currentBlock.nextBlock[direction];
-		this.direction = direction;
-		destination = currentBlock.getPosition();
-		currentBlock.addPlayer(this);
-		walking = true;
-	}
-	
 	@Override
 	public void updateBlockAction() {
 		// TODO Auto-generated method stub
@@ -170,42 +118,38 @@ public class Player implements Entity {
 	}
 	
 	private void stepX(){
-		int sign = destination.comparePositionX(this);
+		int sign = currentBlock.position.comparePositionX(this);
 		position.setX(position.getX() + sign*Speed);
-		
-		boolean check = sign == -1 ? position.getX() > destination.getX() 
-				:  position.getX() < destination.getX();
+		boolean check = sign == 1 ? position.getX() < currentBlock.getPositionX() 
+				:  position.getX() > currentBlock.getPositionX();
 		if(!check){
-			position.setX(destination.getX());
+			position.setX(currentBlock.getPositionX());
 		}
 	}
 	
 	private void stepY(){
-		int sign = destination.comparePositionY(this);
+		int sign = currentBlock.position.comparePositionX(this);
 		position.setY(position.getY() + sign*Speed);
-		boolean check = sign ==  1 ? position.getY() < destination.getY() 
-				:  position.getY() > destination.getY();
+		boolean check = sign == 1 ? position.getY() < currentBlock.getPositionY() 
+				:  position.getY() > currentBlock.getPositionY();
 		if(!check){
-			position.setY(destination.getY());
+			position.setY(currentBlock.getPositionY());
 		}
 	}
 	
 	private boolean finishX(){
-		return position.getX() == destination.getX();
+		return position.getX() == currentBlock.getPositionX();
 	}
 	
 	private boolean finishY(){
-		return position.getY() == destination.getY();
+		return position.getY() == currentBlock.getPositionY();
 	}
 	
 	private void endStep(){
-		countStep++;
-		walking = false;
-		destination = null;
-		if(countStep == numStep){ 
-			GameLogic.nextPhase();
-			countStep = 0;
-			numStep = 0;
+		if(countStep < numStep){
+			
+		} else {
+			
 		}
 	}
 	

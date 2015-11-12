@@ -32,11 +32,11 @@ public class Point {
 	
 	public int comparePositionX(Entity e){
 		if(inPoint(e)) return 0;
-		return this.x > e.getX() ?  1 : -1;
+		return e.getX() < this.x ?  1 : -1;
 	}
 	
 	public int comparePositionY(Entity e){
 		if(inPoint(e)) return 0;
-		return this.y > e.getY() ?  1 : -1;
+		return e.getY() < this.y ?  1 : -1;
 	}
 }
