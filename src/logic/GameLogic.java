@@ -28,7 +28,7 @@ public class GameLogic {
 			RenderableHolder.getInstance().add(block);
 			blocks.add(block);
 		}
-		
+		//dfdfdd
 		player = new Player[4];
 		blocks =new ArrayList<>();
 		//makeMap
