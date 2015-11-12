@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import render.GameScreen;
 import render.RenderableHolder;
 
 public class GameLogic {
@@ -22,9 +23,10 @@ public class GameLogic {
 			PhaseAction=3,
 			PhaseEnd=4;
 	static int PlaystatusHight=350;
-	static int PlaystatusWidth=150;
+	static int PlaystatusWidth=200;
 	static Point[] position=new Point[]{
-		new Point(0,0),new Point(0,350),new Point(850,0),new Point(850,350)
+		new Point(0,0),new Point(0,PlaystatusHight),new Point(GameScreen.Width-PlaystatusWidth,0)
+		,new Point(GameScreen.Width-PlaystatusWidth,PlaystatusHight)
 	};
 	public GameLogic() {
 		// TODO Auto-generated constructor stub
@@ -50,7 +52,7 @@ public class GameLogic {
 		Block first = Field.getBlocks()[0];
 		for(int i=0;i<4;i++)
 		{
-			playerStatus[i]=new PlayerStatus(position[i],PlaystatusHight,PlaystatusWidth,color[i]);
+			playerStatus[i]=new PlayerStatus(position[i],PlaystatusHight,PlaystatusWidth,color[i],i);
 			RenderableHolder.getInstance().add(playerStatus[i]);
 			player[i]=new Player(first);
 			RenderableHolder.getInstance().add(player[i]);

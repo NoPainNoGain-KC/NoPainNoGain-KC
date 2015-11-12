@@ -18,8 +18,8 @@ import javax.swing.JComponent;
 
 
 public class GameScreen extends JComponent{
-	static int High=700;
-	static int Width=1000;
+	public static int High=700;
+	public static int Width=1000;
 	public GameScreen() {
 		// TODO Auto-generated constructor stub
 		super();
